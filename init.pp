@@ -28,6 +28,5 @@ service { 'httpd':
     hasstatus => true,
     hasrestart => true,
     subscribe => File [‘/etc/httpd/conf/httpd.conf’],
-    subscribe => File [‘/var/www/html/index.html’],
 }
 }
