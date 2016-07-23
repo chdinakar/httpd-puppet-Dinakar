@@ -2,7 +2,7 @@ Class httpd {
 
 package { 'httpd':
     ensure => 'installed',
-    before => File[‘/var/www/html/index.html’],
+    before => File[‘/etc/httpd/conf/httpd.conf’],
 }
 
 file { '/etc/httpd/conf/httpd.conf':
@@ -11,7 +11,6 @@ file { '/etc/httpd/conf/httpd.conf':
     owner   => 'root',
     group   => 'root',
     mode    => '644',
-    require => Package['httpd'],
 }
 
 file { '/var/www/html/index.html':
@@ -20,6 +19,7 @@ file { '/var/www/html/index.html':
     owner   => 'root',
     group   => 'root',
     mode    => '755',
+    require => Package['httpd'],
 }
 
 service { 'httpd':
