@@ -1,32 +1,37 @@
-Class httpd {
+class httpd {
 
-package { 'httpd':
+  package { 'httpd':
     ensure => 'installed',
-    before => File[‘/etc/httpd/conf/httpd.conf’],
 }
 
-file { '/etc/httpd/conf/httpd.conf':
-    ensure  => 'file', 
+  file { 'httpd.conf':
+    path    => '/etc/httpd/conf/httpd.conf',
+    ensure  => 'present', 
     source  => 'puppet:///modules/httpd/httpd.conf',
     owner   => 'root',
     group   => 'root',
     mode    => '644',
+    require => Package['httpd'],
+    notify  => Service['httpd'],
 }
 
-file { '/var/www/html/index.html':
+  file { 'index.html':
+    path    => '/var/www/html/index.html',
     ensure  => 'file',
     source  => 'puppet:///modules/httpd/index.html',
     owner   => 'root',
     group   => 'root',
     mode    => '755',
     require => Package['httpd'],
+    notify  => Service['httpd'],
 }
 
-service { 'httpd':
-    ensure => 'running',
-    enable => true,
-    hasstatus => true,
+  service { 'httpd':
+    ensure     => 'running',
+    enable     => true,
+    hasstatus  => true,
     hasrestart => true,
-    subscribe => File [‘/etc/httpd/conf/httpd.conf’],
+    require    => Package ['httpd'],
 }
+
 }
